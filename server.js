@@ -1,10 +1,21 @@
 var express = require('express');
-var app = express()
+var url = require('url');
+var app = express();
 
-app.get('/', function (req, res) {
-  res.send('Hello World!')
-})
+// handle request for favorite's icon with empty response.
+app.get('/favicon.ico', (req, res) => {
+  res.send();
+});
 
-app.listen(8080, function () {
-  console.log('Example app listening on port 8080!')
+app.use(function(req, res) {
+  var path = decodeURI(url.parse(req.url).pathname.substring(1));
+  var dateObject = require('./dates').convert(path);
+
+  console.log(JSON.stringify(dateObject));
+  
+  res.send(dateObject);
+});
+
+app.listen(8080, function() {
+  console.log('Example app listening on port 8080!');
 })
